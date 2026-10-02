@@ -471,6 +471,42 @@ const todayISO = () => {
   return `${values.year}-${values.month}-${values.day}`;
 };
 
+const cairoDateKey = (timestamp = Date.now()) => {
+  const parts = new Intl.DateTimeFormat("en", {
+    timeZone: "Africa/Cairo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(new Date(timestamp));
+  const values = Object.fromEntries(parts.map(part => [part.type, part.value]));
+  return `${values.year}-${values.month}-${values.day}`;
+};
+
+const normalizeWebsiteOpenSeconds = value => {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return {};
+  const entries = Object.entries(value)
+    .filter(([date, seconds]) => /^\d{4}-\d{2}-\d{2}$/.test(date) && Number.isFinite(Number(seconds)))
+    .map(([date, seconds]) => [date, Math.max(0, Math.floor(Number(seconds)))])
+    .sort(([a], [b]) => a.localeCompare(b));
+  return Object.fromEntries(entries.slice(-366));
+};
+
+const formatTrackedDuration = seconds => {
+  const safeSeconds = Math.max(0, Math.floor(Number(seconds) || 0));
+  const hours = Math.floor(safeSeconds / 3600);
+  const minutes = Math.floor((safeSeconds % 3600) / 60);
+  if (hours && minutes) return `${hours} س و${minutes} د`;
+  if (hours) return `${hours} س`;
+  if (minutes) return `${minutes} د`;
+  return "أقل من دقيقة";
+};
+
+const shiftCairoDateKey = (dateKey, days) => {
+  const cursor = new Date(`${dateKey}T12:00:00Z`);
+  cursor.setUTCDate(cursor.getUTCDate() + days);
+  return cairoDateKey(cursor.getTime());
+};
+
 const DAILY_SUCCESS_QUOTES = [
   {
     quote: "في وسط الصعوبة تكمن الفرصة.",
@@ -944,6 +980,7 @@ const normalizeAppData = (parsed = {}) => ({
     dailyPlan: {},
     progressHistory: [],
     ...(parsed?.meta || {}),
+    websiteOpenSeconds: normalizeWebsiteOpenSeconds(parsed?.meta?.websiteOpenSeconds),
     aiTools: Array.isArray(parsed?.meta?.aiTools)
       ? parsed.meta.aiTools
           .filter(tool => tool && typeof tool === "object")
@@ -1738,6 +1775,50 @@ export default function App() {
     },
     []
   );
+
+  useEffect(() => {
+    if (!loaded || !data || (!userId && !auth.isGuest)) return undefined;
+    let activeSince = document.visibilityState === "visible" ? Date.now() : 0;
+
+    const flushWebsiteOpenTime = () => {
+      if (!activeSince) return;
+      const now = Date.now();
+      const elapsedSeconds = Math.max(0, Math.min(120, Math.floor((now - activeSince) / 1000)));
+      activeSince = now;
+      if (!elapsedSeconds) return;
+      persistLatest(current => {
+        const previous = normalizeWebsiteOpenSeconds(current.meta?.websiteOpenSeconds);
+        const key = cairoDateKey(now);
+        return {
+          ...current,
+          meta: {
+            ...current.meta,
+            websiteOpenSeconds: {
+              ...previous,
+              [key]: Number(previous[key] || 0) + elapsedSeconds,
+            },
+          },
+        };
+      });
+    };
+    const handleVisibility = () => {
+      if (document.visibilityState === "visible") {
+        activeSince = Date.now();
+      } else {
+        flushWebsiteOpenTime();
+        activeSince = 0;
+      }
+    };
+    const timer = window.setInterval(flushWebsiteOpenTime, 30 * 1000);
+    document.addEventListener("visibilitychange", handleVisibility);
+    window.addEventListener("pagehide", flushWebsiteOpenTime);
+    return () => {
+      flushWebsiteOpenTime();
+      window.clearInterval(timer);
+      document.removeEventListener("visibilitychange", handleVisibility);
+      window.removeEventListener("pagehide", flushWebsiteOpenTime);
+    };
+  }, [loaded, data, userId, auth.isGuest, persistLatest]);
 
   useEffect(() => {
     if (!loaded || !data) return;
@@ -4206,6 +4287,12 @@ function ProgressScreen({ data }) {
     { key: "quarterly", label: "التقدم الربع سنوي", subtitle: "إنجاز الربع الحالي", color: "#5B8DEF", icon: Layers, stats: summarize(quarterlyItems, item => quarterlyItemProgress(item, planItems.monthly || [], weekTasks)) },
   ];
   const overall = progressStats(data);
+  const websiteOpenSeconds = normalizeWebsiteOpenSeconds(data.meta.websiteOpenSeconds);
+  const todayOpenSeconds = Number(websiteOpenSeconds[today] || 0);
+  const recentOpenDays = Array.from({ length: 7 }, (_, index) => {
+    const date = shiftCairoDateKey(today, -index);
+    return { date, seconds: Number(websiteOpenSeconds[date] || 0) };
+  });
   return (
     <div style={{ ...styles.page, paddingBottom: 90 }}>
       <section className="progressHero" style={{ border: `1px solid ${COLORS.teal}44`, background: `linear-gradient(135deg, ${COLORS.teal}18, ${COLORS.violet}12)`, borderRadius: 22, padding: "22px 20px", marginBottom: 18 }}>
@@ -4234,6 +4321,24 @@ function ProgressScreen({ data }) {
         })}
       </div>
       <div style={{ marginTop: 16, padding: "12px 14px", borderRadius: 13, border: `1px solid ${COLORS.border}`, color: COLORS.textDim, fontSize: 11, lineHeight: 1.8 }}>يتم احتساب كل فترة بشكل مستقل من مهامها الحالية؛ لذلك قد تختلف نسبة اليوم عن الأسبوع أو الشهر أو الربع السنوي.</div>
+      <section aria-label="وقت فتح الموقع اليومي" style={{ marginTop: 16, border: `1px solid ${COLORS.teal}44`, borderRadius: 18, padding: 17, background: `linear-gradient(145deg, ${COLORS.teal}10, ${COLORS.surface})` }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
+          <div>
+            <div style={{ color: COLORS.teal, fontSize: 11, fontWeight: 900 }}>وقت فتح الموقع</div>
+            <h2 style={{ margin: "6px 0 4px", fontSize: 20 }}>تقرير حضورك اليومي</h2>
+            <p style={{ margin: 0, color: COLORS.textDim, fontSize: 11 }}>نحسب الوقت الذي كان فيه LearnHub ظاهرًا ونشطًا، ولا نحسب التبويبات الموجودة في الخلفية.</p>
+          </div>
+          <strong style={{ color: COLORS.teal, fontSize: 28 }}>{formatTrackedDuration(todayOpenSeconds)}</strong>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: 8, marginTop: 14 }}>
+          {recentOpenDays.map(day => (
+            <div key={day.date} style={{ padding: "9px 10px", borderRadius: 11, border: `1px solid ${day.date === today ? COLORS.teal : COLORS.border}55`, background: day.date === today ? `${COLORS.teal}12` : `${COLORS.surface2}88` }}>
+              <small style={{ display: "block", color: day.date === today ? COLORS.teal : COLORS.textDim, fontSize: 10 }}>{day.date === today ? "اليوم" : new Date(`${day.date}T12:00:00`).toLocaleDateString("ar-EG", { weekday: "short", day: "numeric", month: "short" })}</small>
+              <strong style={{ display: "block", marginTop: 5, color: COLORS.text, fontSize: 13 }}>{formatTrackedDuration(day.seconds)}</strong>
+            </div>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }
@@ -6356,6 +6461,10 @@ function WeeklyReportModal({ data, onClose }) {
   const history = data.meta.progressHistory || [];
   const previous = history.length > 1 ? history[history.length - 2].value : 0;
   const change = stats.percent - previous;
+  const websiteOpenSeconds = normalizeWebsiteOpenSeconds(data.meta.websiteOpenSeconds);
+  const today = todayISO();
+  const recentOpenSeconds = Array.from({ length: 7 }, (_, index) => Number(websiteOpenSeconds[shiftCairoDateKey(today, -index)] || 0));
+  const weekOpenSeconds = recentOpenSeconds.reduce((sum, seconds) => sum + seconds, 0);
   return (
     <div className="modal-backdrop" role="dialog" aria-modal="true">
       <div className="modal-panel report-panel" style={styles.modalPanel}>
@@ -6391,6 +6500,16 @@ function WeeklyReportModal({ data, onClose }) {
           <div>
             <span>نقاط الرسم المسجلة</span>
             <strong>{history.length}</strong>
+          </div>
+        </div>
+        <div style={{ marginTop: 15, padding: "12px 14px", borderRadius: 13, border: `1px solid ${COLORS.teal}44`, background: `${COLORS.teal}0d` }}>
+          <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
+            <span style={{ color: COLORS.textDim }}>فتح الموقع اليوم</span>
+            <strong style={{ color: COLORS.teal }}>{formatTrackedDuration(websiteOpenSeconds[today] || 0)}</strong>
+          </div>
+          <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", marginTop: 7 }}>
+            <span style={{ color: COLORS.textDim }}>إجمالي آخر 7 أيام</span>
+            <strong style={{ color: COLORS.text }}>{formatTrackedDuration(weekOpenSeconds)}</strong>
           </div>
         </div>
         <button
