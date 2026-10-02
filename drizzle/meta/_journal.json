@@ -1,0 +1,41 @@
+{
+  "version": "7",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1790448770979,
+      "tag": "0000_peaceful_toxin",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1790508436782,
+      "tag": "0001_kind_phalanx",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1790545599461,
+      "tag": "0002_big_lightspeed",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1790770037491,
+      "tag": "0003_uploaded-files",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1790889076641,
+      "tag": "0004_calm_scarlet_spider",
+      "breakpoints": true
+    }
+  ]
+}

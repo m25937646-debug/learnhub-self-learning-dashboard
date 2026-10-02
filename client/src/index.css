@@ -1,0 +1,397 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+:root {
+  --primary: var(--color-blue-700);
+  --primary-foreground: var(--color-blue-50);
+  --sidebar-primary: var(--color-blue-600);
+  --sidebar-primary-foreground: var(--color-blue-50);
+  --chart-1: var(--color-blue-300);
+  --chart-2: var(--color-blue-500);
+  --chart-3: var(--color-blue-600);
+  --chart-4: var(--color-blue-700);
+  --chart-5: var(--color-blue-800);
+  --radius: 0.65rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.235 0.015 65);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.235 0.015 65);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.235 0.015 65);
+  --secondary: oklch(0.98 0.001 286.375);
+  --secondary-foreground: oklch(0.4 0.015 65);
+  --muted: oklch(0.967 0.001 286.375);
+  --muted-foreground: oklch(0.552 0.016 285.938);
+  --accent: oklch(0.967 0.001 286.375);
+  --accent-foreground: oklch(0.141 0.005 285.823);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.92 0.004 286.32);
+  --input: oklch(0.92 0.004 286.32);
+  --ring: oklch(0.623 0.214 259.815);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.235 0.015 65);
+  --sidebar-accent: oklch(0.967 0.001 286.375);
+  --sidebar-accent-foreground: oklch(0.141 0.005 285.823);
+  --sidebar-border: oklch(0.92 0.004 286.32);
+  --sidebar-ring: oklch(0.623 0.214 259.815);
+}
+
+.dark {
+  --primary: var(--color-blue-700);
+  --primary-foreground: var(--color-blue-50);
+  --sidebar-primary: var(--color-blue-500);
+  --sidebar-primary-foreground: var(--color-blue-50);
+  --background: oklch(0.141 0.005 285.823);
+  --foreground: oklch(0.85 0.005 65);
+  --card: oklch(0.21 0.006 285.885);
+  --card-foreground: oklch(0.85 0.005 65);
+  --popover: oklch(0.21 0.006 285.885);
+  --popover-foreground: oklch(0.85 0.005 65);
+  --secondary: oklch(0.24 0.006 286.033);
+  --secondary-foreground: oklch(0.7 0.005 65);
+  --muted: oklch(0.274 0.006 286.033);
+  --muted-foreground: oklch(0.705 0.015 286.067);
+  --accent: oklch(0.274 0.006 286.033);
+  --accent-foreground:  oklch(0.92 0.005 65);
+  --destructive: oklch(0.704 0.191 22.216);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.488 0.243 264.376);
+  --chart-1: var(--color-blue-300);
+  --chart-2: var(--color-blue-500);
+  --chart-3: var(--color-blue-600);
+  --chart-4: var(--color-blue-700);
+  --chart-5: var(--color-blue-800);
+  --sidebar: oklch(0.21 0.006 285.885);
+  --sidebar-foreground: oklch(0.85 0.005 65);
+  --sidebar-accent: oklch(0.274 0.006 286.033);
+  --sidebar-accent-foreground:  oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.488 0.243 264.376);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  [type="button"]:not(:disabled),
+  [type="submit"]:not(:disabled),
+  [type="reset"]:not(:disabled),
+  a[href],
+  select:not(:disabled),
+  input[type="checkbox"]:not(:disabled),
+  input[type="radio"]:not(:disabled) {
+    @apply cursor-pointer;
+  }
+}
+
+@layer components {
+  /**
+   * Custom container utility that centers content and adds responsive padding.
+   *
+   * This overrides Tailwind's default container behavior to:
+   * - Auto-center content (mx-auto)
+   * - Add responsive horizontal padding
+   * - Set max-width for large screens
+   *
+   * Usage: <div className="container">...</div>
+   *
+   * For custom widths, use max-w-* utilities directly:
+   * <div className="max-w-6xl mx-auto px-4">...</div>
+   */
+  .container {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem; /* 16px - mobile padding */
+    padding-right: 1rem;
+  }
+
+  .flex {
+    min-height: 0;
+    min-width: 0;
+  }
+
+  @media (min-width: 640px) {
+    .container {
+      padding-left: 1.5rem; /* 24px - tablet padding */
+      padding-right: 1.5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .container {
+      padding-left: 2rem; /* 32px - desktop padding */
+      padding-right: 2rem;
+      max-width: 1280px; /* Standard content width */
+    }
+  }
+}
+
+
+/* LearnHub interactive focus center */
+.interactiveInsights { display: grid; gap: 14px; margin-top: 20px; min-width: 0; }
+.insightsHeader { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 2px 2px 0; min-width: 0; text-align: center; }
+.insightsHeaderCopy { display: grid; gap: 3px; min-width: 0; }
+.insightsHeaderCopy strong { color: #E8EEF7; font-size: 17px; letter-spacing: -.02em; }
+.insightsHeaderCopy > span:last-child { color: #9BAABE; font-size: 11px; }
+.insightsEyebrow { color: #44E0C2; font-size: 10px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+.insightsHeaderActions { display: flex; align-items: center; justify-content: center; gap: 9px; flex: 0 0 auto; }
+.insightsOnlineStatus { display: inline-flex; align-items: center; gap: 5px; color: #44E0C2; font-size: 10px; font-weight: 800; white-space: nowrap; }
+.insightsSearchButton { display: inline-flex; align-items: center; gap: 6px; border: 1px solid #294054; border-radius: 10px; padding: 8px 11px; background: #111D2B; color: #E8EEF7; font: inherit; font-size: 11px; cursor: pointer; }
+.insightsSearchButton:hover { border-color: #44E0C2; background: #132A36; }
+.insightsSearchButton kbd { color: #9BAABE; font-size: 9px; }
+.insightMetrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 9px; min-width: 0; }
+.insightMetric { display: flex; align-items: center; gap: 9px; min-width: 0; padding: 12px; border: 1px solid color-mix(in srgb, var(--metric-tone) 28%, transparent); border-radius: 15px; background: linear-gradient(145deg, color-mix(in srgb, var(--metric-tone) 8%, transparent), #111D2B); }
+.insightMetricIcon { display: grid; place-items: center; flex: 0 0 31px; width: 31px; height: 31px; border-radius: 10px; color: var(--metric-tone); background: color-mix(in srgb, var(--metric-tone) 12%, transparent); }
+.insightMetricCopy { display: grid; gap: 4px; min-width: 0; }
+.insightMetricCopy strong { color: var(--metric-tone); font-size: 18px; line-height: 1; }
+.insightMetricCopy span { overflow: hidden; color: #9BAABE; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+.insightsMainGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; min-width: 0; }
+.focusSessionCard, .smartNotificationsCard { min-width: 0; border-radius: 18px; overflow: hidden; }
+.focusSessionCard { padding: 17px; border: 1px solid #44E0C244; background: radial-gradient(circle at 12% 0%, #44E0C218, transparent 42%), linear-gradient(145deg, #111D2B, #0B1522); }
+.focusSessionHeader { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.focusSessionTitle { display: flex; align-items: center; gap: 9px; min-width: 0; }
+.focusSessionIcon, .smartBell { display: grid; place-items: center; flex: 0 0 32px; width: 32px; height: 32px; border-radius: 11px; color: #44E0C2; background: #44E0C218; }
+.focusSessionTitle div { display: grid; gap: 3px; min-width: 0; }
+.focusSessionTitle strong { color: #E8EEF7; font-size: 14px; }
+.focusSessionTitle small { color: #9BAABE; font-size: 10px; }
+.focusSessionState { padding: 5px 8px; border: 1px solid #294054; border-radius: 99px; color: #9BAABE; font-size: 9px; white-space: nowrap; }
+.focusSessionState.isRunning { border-color: #44E0C266; color: #44E0C2; background: #44E0C20D; }
+.focusSessionBody { display: flex; align-items: center; gap: 22px; margin-top: 18px; }
+.focusTimerDial { display: grid; place-items: center; flex: 0 0 142px; width: 142px; height: 142px; border-radius: 50%; background: conic-gradient(#44E0C2 var(--focus-progress), #294054 0); box-shadow: 0 12px 30px #0003; }
+.focusTimerInner { display: grid; place-items: center; align-content: center; width: 116px; height: 116px; border-radius: 50%; background: #0B1522; }
+.focusTimerInner span, .focusTimerInner small { color: #9BAABE; font-size: 9px; }
+.focusTimerInner strong { margin: 5px 0 2px; color: #E8EEF7; font-size: 28px; letter-spacing: .04em; line-height: 1; }
+.focusSessionControls { display: grid; gap: 10px; flex: 1; min-width: 0; }
+.focusPresetLabel { color: #9BAABE; font-size: 10px; }
+.focusPresets { display: flex; flex-wrap: wrap; gap: 7px; }
+.focusPresets button { display: inline-flex; align-items: baseline; gap: 3px; border: 1px solid #294054; border-radius: 10px; padding: 8px 12px; background: #0B1522; color: #9BAABE; font: inherit; font-size: 12px; cursor: pointer; }
+.focusPresets button span { font-size: 9px; }
+.focusPresets button.isSelected { border-color: #44E0C2; color: #44E0C2; background: #44E0C218; box-shadow: 0 0 0 3px #44E0C20D; }
+.focusPresets button:disabled { cursor: not-allowed; opacity: .55; }
+.focusActionRow { display: flex; gap: 8px; }
+.focusPrimaryAction, .focusResetAction { display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 40px; border-radius: 11px; font: inherit; font-size: 11px; font-weight: 900; cursor: pointer; }
+.focusPrimaryAction { flex: 1; border: 0; color: #071311; background: #44E0C2; }
+.focusPrimaryAction:hover { background: #6BEBD5; }
+.focusResetAction { flex: 0 0 auto; border: 1px solid #294054; padding: 0 12px; color: #9BAABE; background: transparent; }
+.focusResetAction:hover { border-color: #9BAABE; color: #E8EEF7; }
+.focusActionIcon { display: grid; place-items: center; }
+.focusSessionFooter { display: flex; align-items: center; gap: 7px; margin-top: 14px; color: #9BAABE; font-size: 10px; line-height: 1.5; }
+.focusFooterDot { width: 6px; height: 6px; border-radius: 50%; background: #44E0C2; box-shadow: 0 0 0 4px #44E0C20F; }
+.smartNotificationsCard { padding: 15px; border: 1px solid #D6A65D44; background: radial-gradient(circle at 90% 0%, #D6A65D16, transparent 44%), linear-gradient(145deg, #111D2B, #0B1522); }
+.smartNotificationsHeader { display: flex; align-items: center; gap: 9px; width: 100%; border: 0; padding: 0; background: transparent; color: #E8EEF7; text-align: start; cursor: pointer; }
+.smartNotificationsCopy { display: grid; gap: 3px; flex: 1; min-width: 0; }
+.smartNotificationsCopy strong { font-size: 14px; }
+.smartNotificationsCopy small { color: #9BAABE; font-size: 10px; }
+.smartBell { color: #D6A65D; background: #D6A65D18; }
+.smartNotificationsCount { display: grid; place-items: center; min-width: 25px; height: 25px; padding: 0 7px; border-radius: 99px; color: #D6A65D; background: #D6A65D18; font-size: 11px; font-weight: 900; }
+.smartNotificationsChevron { color: #9BAABE; font-size: 16px; }
+.smartNotificationsPreview { display: flex; align-items: center; gap: 7px; margin-top: 17px; color: #9BAABE; font-size: 10px; }
+.smartPreviewLine { width: 18px; height: 1px; background: #D6A65D88; }
+.smartNotificationsList { display: grid; gap: 7px; margin-top: 12px; padding-top: 12px; border-top: 1px solid #294054; }
+.smartNotificationItem { display: flex; align-items: flex-start; gap: 8px; width: 100%; border: 1px solid #294054; border-radius: 11px; padding: 9px; background: #0B1522; color: #E8EEF7; text-align: start; cursor: pointer; }
+.smartNotificationItem:hover { border-color: #D6A65D88; background: #132131; }
+.smartNotificationItem span { display: grid; gap: 3px; flex: 1; min-width: 0; }
+.smartNotificationItem strong { font-size: 11px; }
+.smartNotificationItem small { overflow: hidden; color: #9BAABE; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+@media (max-width: 760px) {
+  .insightsHeader { align-items: center; flex-direction: column; }
+  .insightsHeaderActions { justify-content: center; width: 100%; }
+  .insightsMainGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .focusSessionCard, .smartNotificationsCard { padding: 12px; border-radius: 15px; }
+  .focusSessionBody { gap: 9px; }
+  .focusTimerDial { flex-basis: 108px; width: 108px; height: 108px; }
+  .focusTimerInner { width: 88px; height: 88px; }
+  .focusTimerInner strong { font-size: 21px; }
+  .focusSessionTitle strong, .smartNotificationsCopy strong { font-size: 12px; }
+  .focusSessionTitle small, .smartNotificationsCopy small, .focusSessionFooter, .smartNotificationsPreview { font-size: 9px; }
+  .focusSessionState { display: none; }
+  .focusPresets button { padding: 6px 8px; }
+}
+@media (max-width: 520px) {
+  .insightMetrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .focusSessionBody { align-items: stretch; flex-direction: column; }
+  .focusTimerDial { align-self: center; }
+  .focusSessionControls { width: 100%; }
+}
+@media (max-width: 360px) {
+  .insightMetrics { grid-template-columns: 1fr; }
+  .focusActionRow { flex-direction: column; }
+  .focusResetAction { min-height: 38px; }
+}
+
+
+/* Interactive insights v2 — horizontal control deck */
+.interactiveInsights { gap: 16px; }
+.insightsHeader { padding: 0 4px 4px; }
+.insightsHeaderCopy strong { font-size: 18px; }
+.insightMetrics { grid-template-columns: repeat(4, minmax(118px, 1fr)); overflow-x: auto; padding-bottom: 2px; }
+.insightMetric { min-height: 66px; border-color: #294054; background: #0B1522; box-shadow: inset 0 1px 0 #ffffff08; }
+.insightMetric:hover { border-color: color-mix(in srgb, var(--metric-tone) 60%, #294054); transform: translateY(-1px); }
+.insightsMainGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; align-items: stretch; }
+.interactiveInsights { direction: rtl; }
+.insightsHeader { flex-direction: row; align-items: center; justify-content: space-between; text-align: right; }
+.insightsHeaderCopy { text-align: right; }
+.dashboardSectionTitle { justify-content: flex-end; text-align: right; }
+.focusSessionCard { position: relative; display: grid; grid-template-rows: auto 1fr auto; min-height: 248px; border: 1px solid #44E0C244; background: #0B1522; box-shadow: 0 14px 30px #02081155; }
+.focusSessionCard::before { position: absolute; top: 0; right: 18px; left: 18px; height: 3px; border-radius: 0 0 8px 8px; background: #44E0C2; content: ""; }
+.focusSessionBody { display: grid; grid-template-columns: minmax(104px, 132px) minmax(0, 1fr); align-items: center; gap: 18px; margin-top: 12px; }
+.focusTimerDial { width: 132px; height: 132px; }
+.focusTimerInner { width: 108px; height: 108px; }
+.focusSessionControls { align-content: center; }
+.focusPresets { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.focusPresets button { justify-content: center; padding: 8px 6px; }
+.focusActionRow { margin-top: 3px; }
+.focusSessionFooter { margin-top: 10px; padding-top: 10px; border-top: 1px solid #294054; }
+.smartNotificationsCard { position: relative; display: grid; grid-template-rows: auto auto 1fr; min-height: 248px; border: 1px solid #D6A65D55; background: #0B1522; box-shadow: 0 14px 30px #02081155; }
+.smartNotificationsCard::before { position: absolute; top: 0; right: 18px; left: 18px; height: 3px; border-radius: 0 0 8px 8px; background: #D6A65D; content: ""; }
+.smartNotificationsPreview { margin-top: 14px; padding: 10px 0; border-top: 1px solid #294054; border-bottom: 1px solid #294054; }
+.smartNotificationsList { align-content: start; margin-top: 10px; padding-top: 0; border-top: 0; overflow: auto; }
+.smartNotificationItem { min-height: 44px; }
+@media (max-width: 760px) {
+  .insightsMainGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .focusSessionCard, .smartNotificationsCard { padding: 11px; }
+  .focusSessionBody { grid-template-columns: 1fr; justify-items: stretch; gap: 10px; }
+  .focusTimerDial { width: 92px; height: 92px; justify-self: center; }
+  .focusTimerInner { width: 76px; height: 76px; }
+  .focusTimerInner strong { font-size: 17px; }
+  .focusTimerInner span, .focusTimerInner small { font-size: 8px; }
+  .focusSessionTitle small, .smartNotificationsCopy small, .focusSessionFooter, .smartNotificationsPreview { display: none; }
+  .focusSessionTitle strong, .smartNotificationsCopy strong { font-size: 11px; }
+  .focusSessionIcon, .smartBell { width: 27px; height: 27px; flex-basis: 27px; }
+  .focusSessionState { display: none; }
+  .focusActionRow { flex-direction: column; }
+  .focusResetAction { min-height: 34px; }
+  .smartNotificationsList { max-height: 130px; }
+  .smartNotificationItem { padding: 7px; }
+  .smartNotificationItem small { white-space: normal; }
+}
+@media (max-width: 430px) {
+  .insightMetrics { grid-template-columns: repeat(4, minmax(108px, 1fr)); }
+  .insightsMainGrid { grid-template-columns: repeat(2, minmax(168px, 1fr)); overflow-x: auto; padding-bottom: 4px; }
+  .focusSessionCard, .smartNotificationsCard { min-width: 168px; }
+}
+
+
+/* Collapsed interaction state */
+.focusSessionHeader { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; border: 0; padding: 0; background: transparent; color: inherit; font: inherit; text-align: start; cursor: pointer; }
+.focusSessionHeaderEnd { display: inline-flex; align-items: center; gap: 8px; }
+.focusSessionChevron { color: #9BAABE; font-size: 16px; line-height: 1; }
+.focusSessionCard:not(.isOpen), .smartNotificationsCard:not(.isOpen) { min-height: 0; }
+.focusSessionCard:not(.isOpen) { padding-block: 14px; }
+.smartNotificationsCard:not(.isOpen) { padding-block: 14px; }
+.focusSessionCard:not(.isOpen)::before, .smartNotificationsCard:not(.isOpen)::before { opacity: .72; }
+.focusSessionCard:not(.isOpen) .focusSessionTitle small { display: none; }
+.smartNotificationsCard:not(.isOpen) .smartNotificationsHeader { min-height: 30px; }
+
+
+/* Full-content layout: keep every item visible inside its card */
+.insightsSummaryLabel { display: inline-flex; align-items: center; gap: 5px; color: #9BAABE; font-size: 10px; white-space: nowrap; }
+.smartNotificationsList { max-height: none !important; overflow: visible !important; }
+.smartNotificationItem small { overflow: visible !important; white-space: normal !important; }
+@media (max-width: 760px) {
+  .focusSessionTitle small, .smartNotificationsCopy small { display: block !important; }
+  .focusSessionFooter { display: flex !important; }
+  .smartNotificationsPreview { display: flex !important; }
+  .smartNotificationsList { max-height: none !important; }
+}
+
+/* Compact daily battle under the daily quote */
+.daily-spotlight { margin-top: 10px !important; padding: 10px !important; border-radius: 13px !important; box-shadow: 0 10px 24px rgba(3, 12, 28, .12) !important; }
+.daily-spotlight > button { margin-bottom: 7px !important; }
+.daily-spotlight #daily-battle-content > div:first-child { margin-bottom: 7px !important; padding: 7px 9px !important; }
+.daily-spotlight #daily-battle-content > div:first-child + div { gap: 5px !important; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important; align-items: start; }
+.daily-spotlight #daily-battle-content > div:first-child + div > div { padding: 5px 7px !important; border-radius: 8px !important; }
+@media (max-width: 620px) {
+  .daily-spotlight #daily-battle-content > div:first-child + div { grid-template-columns: 1fr !important; }
+}
+
+.dailyQuoteBattleStack { display: grid; gap: 10px; min-width: 0; }
+.dailyQuoteBattleStack .dailySuccessQuote,
+.dailyQuoteBattleStack .daily-spotlight { width: 100%; min-width: 0; }
+
+/* Human-first daily check-in */
+.humanCheckin { display: grid; gap: 15px; margin-top: 18px; padding: 17px; border: 1px solid rgba(55,200,180,.28); border-radius: 20px; background: radial-gradient(circle at 4% 0%, rgba(55,200,180,.13), transparent 35%), linear-gradient(145deg, #111D2B, #0B1522); box-shadow: 0 14px 34px rgba(2,8,18,.14); }
+.humanCheckinHead { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; }
+.humanCheckinEyebrow { color: #44E0C2; font-size: 10px; font-weight: 900; letter-spacing: .08em; }
+.humanCheckin h2 { margin: 5px 0 3px; color: #E8EEF7; font-size: 18px; }
+.humanCheckin p { margin: 0; color: #9BAABE; font-size: 11px; }
+.humanChoiceGrid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 9px; }
+.humanChoice { display: flex; align-items: center; gap: 9px; min-width: 0; padding: 11px; border: 1px solid #294054; border-radius: 13px; background: #0B1522; color: #E8EEF7; text-align: start; cursor: pointer; transition: transform .16s ease, border-color .16s ease, background .16s ease; }
+.humanChoice:hover, .humanChoice.isSelected { transform: translateY(-2px); border-color: #44E0C2; background: #132A36; }
+.humanChoiceIcon { display: grid; place-items: center; flex: 0 0 29px; width: 29px; height: 29px; border-radius: 10px; color: #44E0C2; background: #44E0C218; font-size: 17px; }
+.humanChoice span:nth-child(2) { display: grid; gap: 3px; min-width: 0; flex: 1; }
+.humanChoice strong { font-size: 11px; }
+.humanChoice small { color: #9BAABE; font-size: 9px; line-height: 1.5; }
+.humanChoiceArrow { color: #44E0C2; font-size: 15px; }
+.humanPlanNote { padding: 10px 12px; border-inline-start: 3px solid #44E0C2; border-radius: 8px; background: #44E0C20D; color: #C9D5E5; font-size: 11px; line-height: 1.7; }
+.journeyLine { display: flex; align-items: flex-start; gap: 8px; min-width: 250px; padding-top: 4px; }
+.journeyStep { position: relative; display: grid; justify-items: center; gap: 4px; flex: 1; color: #68778C; font-size: 9px; text-align: center; }
+.journeyStep:not(:last-child)::after { position: absolute; top: 12px; right: -18px; left: calc(50% + 15px); height: 1px; background: #294054; content: ''; }
+.journeyStep span { display: grid; place-items: center; width: 24px; height: 24px; border: 1px solid #294054; border-radius: 50%; background: #0B1522; color: #68778C; font-size: 10px; }
+.journeyStep.isDone { color: #44E0C2; }
+.journeyStep.isDone span { border-color: #44E0C2; background: #44E0C218; color: #44E0C2; }
+@media (max-width: 760px) { .humanCheckinHead { display: grid; gap: 12px; } .journeyLine { min-width: 0; width: 100%; } .humanChoiceGrid { grid-template-columns: 1fr; } }
+
+/* Evidence-based learning cycle layout */
+.learningCycleSteps, .learningReviewGrid { min-width: 0; }
+@media (max-width: 760px) {
+  .learningCycleSteps { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+  .learningReviewGrid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+  .learningErrorForm { grid-template-columns: 1fr !important; }
+  .learningErrorForm button { min-height: 42px; }
+}
+@media (max-width: 480px) {
+  .learningCycle { padding: 12px !important; border-radius: 17px !important; }
+  .learningCycleSteps { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .learningReviewGrid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+}
